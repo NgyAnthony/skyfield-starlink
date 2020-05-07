@@ -4,8 +4,11 @@ from skyfield.api import load
 
 app = Flask(__name__)
 
-
 @app.route('/')
+def index():
+    return "<h1>Welcome to our server !!</h1>"
+
+@app.route('/fetch')
 def fetch_satellites():
     satellites_file = load_satellites()
     current_time = compute_time()
