@@ -1,14 +1,10 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask import jsonify
 from skyfield.api import load
 
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    return "<h1>Welcome to our server !!</h1>"
-
-@app.route('/fetch')
 def fetch_satellites():
     satellites_file = load_satellites()
     current_time = compute_time()
@@ -52,3 +48,8 @@ def compute_position(satellites, time):
         results.append(adjusted_elevation)
         results.append(0)
     return results
+
+
+if __name__ == '__main__':
+    # Threaded option to enable multiple instances for multiple user access support
+    app.run(threaded=True, port=5000)
