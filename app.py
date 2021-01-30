@@ -1,7 +1,10 @@
-from flask import Flask, url_for
+from flask import Flask
 from flask import jsonify
 from skyfield.api import load
-from flask_cors import CORS, cross_origin
+from skyfield.iokit import parse_tle_file
+from flask_cors import CORS
+import urllib2
+from contextlib import closing
 
 app = Flask(__name__)
 CORS(app)
@@ -18,7 +21,8 @@ def fetch_satellites():
 
 def load_satellites():
     starlink_url = 'https://celestrak.com/NORAD/elements/starlink.txt'
-    satellites = load.tle_file(starlink_url)
+    with closing(urllib2.urlopen(starlink_url)) as f:
+        satellites = list(parse_tle_file(f))
     return satellites
 
 
